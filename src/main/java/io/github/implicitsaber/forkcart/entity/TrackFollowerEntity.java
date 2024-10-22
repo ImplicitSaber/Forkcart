@@ -300,15 +300,16 @@ public class TrackFollowerEntity extends Entity {
     }
 
     @Override
-    public void updateTrackedPositionAndAngles(double x, double y, double z, float yaw, float pitch, int interpolationSteps) {
+    public void updateTrackedPositionAndAngles(double x, double y, double z, float yaw, float pitch, int interpolationSteps, boolean interpolate) {
         if (this.firstPositionUpdate) {
             this.firstPositionUpdate = false;
-            super.updateTrackedPositionAndAngles(x, y, z, yaw, pitch, interpolationSteps);
+            super.updateTrackedPositionAndAngles(x, y, z, yaw, pitch, interpolationSteps, interpolate);
         }
 
         this.serverPosition.set(x, y, z);
         this.positionInterpSteps = interpolationSteps + 2;
-        this.setAngles(yaw, pitch);
+        this.setYaw(yaw);
+        this.setPitch(pitch);
     }
 
     // This method should be called updateTrackedVelocity, its usage is very similar to the above method
@@ -323,9 +324,9 @@ public class TrackFollowerEntity extends Entity {
     }
 
     @Override
-    protected void initDataTracker(DataTracker.Builder builder) {
-        builder.add(ORIENTATION, new Quaternionf().identity());
-        builder.add(CHAIN_LIFTING, false);
+    protected void initDataTracker() {
+        this.dataTracker.startTracking(ORIENTATION, new Quaternionf().identity());
+        this.dataTracker.startTracking(CHAIN_LIFTING, false);
     }
 
     @Override

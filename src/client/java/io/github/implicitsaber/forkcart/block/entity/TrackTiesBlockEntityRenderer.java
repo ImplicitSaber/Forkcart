@@ -1,5 +1,6 @@
 package io.github.implicitsaber.forkcart.block.entity;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.implicitsaber.forkcart.Forkcart;
 import io.github.implicitsaber.forkcart.ForkcartClient;
 import io.github.implicitsaber.forkcart.block.TrackTiesBlockEntity;
@@ -16,6 +17,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.world.World;
 import org.joml.Matrix3d;
 import org.joml.Vector3d;
@@ -59,7 +61,7 @@ public class TrackTiesBlockEntityRenderer implements BlockEntityRenderer<TrackTi
         var start = entity.pose();
         var pos = entity.getPos();
 
-        if (MinecraftClient.getInstance().getDebugHud().shouldShowDebugHud()) {
+        if (MinecraftClient.getInstance().options.debugEnabled) {
             matrices.push();
 
             matrices.translate(0.5, 0.5, 0.5);
@@ -125,11 +127,11 @@ public class TrackTiesBlockEntityRenderer implements BlockEntityRenderer<TrackTi
 
             matrices.translate(0, -0.4375, 0);
 
-            buffer.vertex(entry, 0.5f, 0, z0).color(WHITE).texture(1, v0).overlay(overlay).light(light).normal(entry, 0, 1, 0);
-            buffer.vertex(entry, -0.5f, 0, z0).color(WHITE).texture(0, v0).overlay(overlay).light(light).normal(entry, 0, 1, 0);
+            buffer.vertex(posMat, 0.5f, 0, z0).color(WHITE).texture(1, v0).overlay(overlay).light(light).normal(nmlMat, 0, 1, 0).next();
+            buffer.vertex(posMat, -0.5f, 0, z0).color(WHITE).texture(0, v0).overlay(overlay).light(light).normal(nmlMat, 0, 1, 0).next();
 
-            buffer.vertex(entry, -0.5f, 0, z1).color(WHITE).texture(0, v1).overlay(overlay).light(light).normal(entry, 0, 1, 0);
-            buffer.vertex(entry, 0.5f, 0, z1).color(WHITE).texture(1, v1).overlay(overlay).light(light).normal(entry, 0, 1, 0);
+            buffer.vertex(posMat, -0.5f, 0, z1).color(WHITE).texture(0, v1).overlay(overlay).light(light).normal(nmlMat, 0, 1, 0).next();
+            buffer.vertex(posMat, 0.5f, 0, z1).color(WHITE).texture(1, v1).overlay(overlay).light(light).normal(nmlMat, 0, 1, 0).next();
 
             matrices.pop();
         }
@@ -156,24 +158,25 @@ public class TrackTiesBlockEntityRenderer implements BlockEntityRenderer<TrackTi
 
     private void renderDebug(Pose pose, MatrixStack.Entry entry, VertexConsumer buffer) {
         var posMat = entry.getPositionMatrix();
+        var nmlMat = entry.getNormalMatrix();
         for (int x = 0; x < 3; x++) {
             for (int y = 0; y < 3; y++) {
                 posMat.setRowColumn(x, y, (float) pose.basis().getRowColumn(x, y));
             }
         }
 
-        buffer.vertex(entry, 1, 0, 1).color(WHITE).texture(0, 0)
+        buffer.vertex(posMat, 1, 0, 1).color(WHITE).texture(0, 0)
                 .overlay(OverlayTexture.DEFAULT_UV).light(LightmapTextureManager.MAX_LIGHT_COORDINATE)
-                .normal(entry, 0, 1, 0);
-        buffer.vertex(entry, 0, 0, 1).color(WHITE).texture(1, 0)
+                .normal(nmlMat, 0, 1, 0).next();
+        buffer.vertex(posMat, 0, 0, 1).color(WHITE).texture(1, 0)
                 .overlay(OverlayTexture.DEFAULT_UV).light(LightmapTextureManager.MAX_LIGHT_COORDINATE)
-                .normal(entry, 0, 1, 0);
-        buffer.vertex(entry, 0, 0, 0).color(WHITE).texture(1, 1)
+                .normal(nmlMat, 0, 1, 0).next();
+        buffer.vertex(posMat, 0, 0, 0).color(WHITE).texture(1, 1)
                 .overlay(OverlayTexture.DEFAULT_UV).light(LightmapTextureManager.MAX_LIGHT_COORDINATE)
-                .normal(entry, 0, 1, 0);
-        buffer.vertex(entry, 1, 0, 0).color(WHITE).texture(0, 1)
+                .normal(nmlMat, 0, 1, 0).next();
+        buffer.vertex(posMat, 1, 0, 0).color(WHITE).texture(0, 1)
                 .overlay(OverlayTexture.DEFAULT_UV).light(LightmapTextureManager.MAX_LIGHT_COORDINATE)
-                .normal(entry, 0, 1, 0);
+                .normal(nmlMat, 0, 1, 0).next();
     }
 
     private void renderPart(World world, MatrixStack.Entry entry, VertexConsumer buffer, Pose start, Pose end,
@@ -203,15 +206,17 @@ public class TrackTiesBlockEntityRenderer implements BlockEntityRenderer<TrackTi
         int light1 = WorldRenderer.getLightmapCoordinates(world, pos1);
 
         var point = new Vector3f();
+        var posMat = entry.getPositionMatrix();
+        var nmlMat = entry.getNormalMatrix();
 
         point.set(0.5, 0, 0).mul(basis0).add((float) origin0.x(), (float) origin0.y(), (float) origin0.z());
-        buffer.vertex(entry, point).color(WHITE).texture(0, v0).overlay(overlay).light(light0).normal(entry, (float) norm0.x(), (float) norm0.y(), (float) norm0.z());
+        buffer.vertex(posMat, point.x(), point.y(), point.z()).color(WHITE).texture(0, v0).overlay(overlay).light(light0).normal(nmlMat, (float) norm0.x(), (float) norm0.y(), (float) norm0.z()).next();
         point.set(-0.5, 0, 0).mul(basis0).add((float) origin0.x(), (float) origin0.y(), (float) origin0.z());
-        buffer.vertex(entry, point).color(WHITE).texture(1, v0).overlay(overlay).light(light0).normal(entry, (float) norm0.x(), (float) norm0.y(), (float) norm0.z());
+        buffer.vertex(posMat, point.x(), point.y(), point.z()).color(WHITE).texture(1, v0).overlay(overlay).light(light0).normal(nmlMat, (float) norm0.x(), (float) norm0.y(), (float) norm0.z()).next();
 
         point.set(-0.5, 0, 0).mul(basis1).add((float) origin1.x(), (float) origin1.y(), (float) origin1.z());
-        buffer.vertex(entry, point).color(WHITE).texture(1, v1).overlay(overlay).light(light1).normal(entry, (float) norm1.x(), (float) norm1.y(), (float) norm1.z());
+        buffer.vertex(posMat, point.x(), point.y(), point.z()).color(WHITE).texture(1, v1).overlay(overlay).light(light1).normal(nmlMat, (float) norm1.x(), (float) norm1.y(), (float) norm1.z()).next();
         point.set(0.5, 0, 0).mul(basis1).add((float) origin1.x(), (float) origin1.y(), (float) origin1.z());
-        buffer.vertex(entry, point).color(WHITE).texture(0, v1).overlay(overlay).light(light1).normal(entry, (float) norm1.x(), (float) norm1.y(), (float) norm1.z());
+        buffer.vertex(posMat, point.x(), point.y(), point.z()).color(WHITE).texture(0, v1).overlay(overlay).light(light1).normal(nmlMat, (float) norm1.x(), (float) norm1.y(), (float) norm1.z()).next();
     }
 }

@@ -34,7 +34,7 @@ public class SwitchTiesBlock extends TrackTiesBlock {
     }
 
     @Override
-    protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
         boolean switched = state.get(SWITCHED);
         boolean powered = world.isReceivingRedstonePower(pos);
         if(switched != powered) world.setBlockState(pos, state.with(SWITCHED, powered), Block.NOTIFY_ALL);

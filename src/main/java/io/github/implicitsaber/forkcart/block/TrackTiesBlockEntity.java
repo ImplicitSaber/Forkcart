@@ -140,8 +140,8 @@ public class TrackTiesBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-        super.readNbt(nbt, registryLookup);
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
 
         this.prev = SUtil.getBlockPos(nbt, "prev");
         this.next = SUtil.getBlockPos(nbt, "next");
@@ -155,8 +155,8 @@ public class TrackTiesBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-        super.writeNbt(nbt, registryLookup);
+    protected void writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
 
         SUtil.putBlockPos(nbt, this.prev, "prev");
         SUtil.putBlockPos(nbt, this.next, "next");
@@ -170,9 +170,9 @@ public class TrackTiesBlockEntity extends BlockEntity {
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
-        var nbt = super.toInitialChunkDataNbt(registryLookup);
-        writeNbt(nbt, registryLookup);
+    public NbtCompound toInitialChunkDataNbt() {
+        var nbt = super.toInitialChunkDataNbt();
+        writeNbt(nbt);
         return nbt;
     }
 

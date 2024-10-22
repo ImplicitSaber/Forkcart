@@ -21,7 +21,7 @@ public class ShuttleTiesBlock extends TrackTiesBlock {
     }
 
     @Override
-    protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
         boolean running = state.get(RUNNING);
         boolean powered = world.isReceivingRedstonePower(pos);
         if(running == powered) world.setBlockState(pos, state.with(RUNNING, !powered), Block.NOTIFY_ALL);

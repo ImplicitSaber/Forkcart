@@ -29,7 +29,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TrackTiesBlock extends FacingBlock implements BlockEntityProvider {
-    public static final MapCodec<TrackTiesBlock> CODEC = createCodec(TrackTiesBlock::new);
     public static final IntProperty POINTING = IntProperty.of("pointing", 0, 3);
     public static final Map<Direction, Map<Direction, Integer>> POINTING_MAP = new HashMap<>();
     public static final VoxelShape[] SHAPES = new VoxelShape[Direction.values().length];
@@ -100,12 +99,12 @@ public class TrackTiesBlock extends FacingBlock implements BlockEntityProvider {
     }
 
     @Override
-    protected boolean hasComparatorOutput(BlockState state) {
+    public boolean hasComparatorOutput(BlockState state) {
         return true;
     }
 
     @Override
-    protected int getComparatorOutput(BlockState state, World world, BlockPos pos) {
+    public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
         return world.getBlockEntity(pos) instanceof TrackTiesBlockEntity ttBE ? (ttBE.hasCart() ? 15 : 0) : 0;
     }
 
@@ -126,12 +125,12 @@ public class TrackTiesBlock extends FacingBlock implements BlockEntityProvider {
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return SHAPES[state.get(FACING).ordinal()];
     }
 
     @Override
-    protected void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
         if (world.getBlockEntity(pos) instanceof TrackTiesBlockEntity tie) {
             if (!newState.isOf(state.getBlock())) {
                 if (!world.isClient()) tie.onDestroy();
@@ -144,7 +143,7 @@ public class TrackTiesBlock extends FacingBlock implements BlockEntityProvider {
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (player.canModifyBlocks() &&
                 !player.getStackInHand(Hand.MAIN_HAND).isIn(Forkcart.TRACK_TAG) &&
                 world.getBlockEntity(pos) instanceof TrackTiesBlockEntity tie) {
@@ -163,7 +162,7 @@ public class TrackTiesBlock extends FacingBlock implements BlockEntityProvider {
             }
         }
 
-        return super.onUse(state, world, pos, player, hit);
+        return super.onUse(state, world, pos, player, hand, hit);
     }
 
     public Pose getPose(BlockState state, BlockPos pos) {
@@ -193,11 +192,6 @@ public class TrackTiesBlock extends FacingBlock implements BlockEntityProvider {
         basis.rotate(normal.getRotationQuaternion());
 
         return new Pose(pos, basis);
-    }
-
-    @Override
-    protected MapCodec<? extends FacingBlock> getCodec() {
-        return CODEC;
     }
 
     @Nullable

@@ -1,19 +1,18 @@
 package io.github.implicitsaber.forkcart.item;
 
-import io.github.implicitsaber.forkcart.Forkcart;
 import io.github.implicitsaber.forkcart.block.TrackTiesBlockEntity;
 import io.github.implicitsaber.forkcart.component.OriginComponent;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.LoreComponent;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Locale;
@@ -23,12 +22,7 @@ public class TrackItem extends Item {
     private final Type type;
 
     public TrackItem(Settings settings, Type type) {
-        super(settings.component(DataComponentTypes.LORE,
-                new LoreComponent(List.of(
-                        Text.translatable("item.forkcart.track.desc").formatted(Formatting.GRAY),
-                        Text.translatable("item.forkcart.track." +type.name().toLowerCase(Locale.ROOT) +".desc")
-                                .formatted(Formatting.GRAY)))
-        ));
+        super(settings);
         this.type = type;
     }
     @Override
@@ -46,7 +40,7 @@ public class TrackItem extends Item {
                 return ActionResult.SUCCESS;
             }
 
-            var origin = stack.get(Forkcart.ORIGIN_POS);
+            var origin = OriginComponent.get(stack);
             if (origin != null) {
                 var oPos = origin.pos();
                 if (!pos.equals(oPos) && world.getBlockEntity(oPos) instanceof TrackTiesBlockEntity oTies) {
@@ -55,18 +49,18 @@ public class TrackItem extends Item {
                     world.playSound(null, pos, SoundEvents.ENTITY_IRON_GOLEM_REPAIR, SoundCategory.BLOCKS, 1.5f, 0.7f);
                 }
 
-                stack.remove(Forkcart.ORIGIN_POS);
+                OriginComponent.remove(stack);
             } else {
-                stack.set(Forkcart.ORIGIN_POS, new OriginComponent(pos));
+                new OriginComponent(pos).set(stack);
             }
         } else {
-            var origin = stack.get(Forkcart.ORIGIN_POS);
+            var origin = OriginComponent.get(stack);
             if (origin != null) {
                 if (world.isClient()) {
                     return ActionResult.CONSUME;
                 }
 
-                stack.remove(Forkcart.ORIGIN_POS);
+                OriginComponent.remove(stack);
             }
         }
 
@@ -74,15 +68,16 @@ public class TrackItem extends Item {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-        super.appendTooltip(stack, context, tooltip, type);
+    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+        super.appendTooltip(stack, world, tooltip, context);
 
-        var origin = stack.get(Forkcart.ORIGIN_POS);
-        if (origin != null) {
-            origin.appendTooltip(context, tooltip::add, type);
-        }
+        tooltip.add(Text.translatable("item.forkcart.track.desc").formatted(Formatting.GRAY, Formatting.ITALIC));
+        tooltip.add(Text.translatable("item.forkcart.track." + type.name().toLowerCase(Locale.ROOT) + ".desc")
+                .formatted(Formatting.GRAY, Formatting.ITALIC));
+
+        var origin = OriginComponent.get(stack);
+        if (origin != null) origin.appendTooltip(tooltip);
     }
-
     public Type getType() {
         return type;
     }
