@@ -1,6 +1,5 @@
 package io.github.implicitsaber.forkcart.block.entity;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.implicitsaber.forkcart.Forkcart;
 import io.github.implicitsaber.forkcart.ForkcartClient;
 import io.github.implicitsaber.forkcart.block.TrackTiesBlock;
@@ -18,7 +17,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RotationAxis;
 import net.minecraft.world.World;
 import org.joml.Matrix3d;
 import org.joml.Vector3d;

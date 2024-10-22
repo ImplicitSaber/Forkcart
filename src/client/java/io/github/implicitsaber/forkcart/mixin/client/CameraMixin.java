@@ -1,5 +1,6 @@
 package io.github.implicitsaber.forkcart.mixin.client;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import io.github.implicitsaber.forkcart.ForkcartClient;
 import io.github.implicitsaber.forkcart.entity.TrackFollowerEntity;
 import net.minecraft.client.render.Camera;
@@ -9,21 +10,19 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BlockView;
 import org.joml.Quaternionf;
 import org.joml.Vector3d;
-import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Camera.class)
 public abstract class CameraMixin {
     @Shadow protected abstract void setPos(Vec3d pos);
+
     @Shadow @Final private Quaternionf rotation;
-    @Shadow @Final private Vector3f horizontalPlane;
-    @Shadow @Final private Vector3f verticalPlane;
-    @Shadow @Final private Vector3f diagonalPlane;
 
     @Inject(method = "update(Lnet/minecraft/world/BlockView;Lnet/minecraft/entity/Entity;ZZF)V",
             at = @At(value = "INVOKE", shift = At.Shift.AFTER, ordinal = 0, target = "Lnet/minecraft/client/render/Camera;setPos(DDD)V"))
@@ -44,12 +43,15 @@ public abstract class CameraMixin {
 
                     if (ForkcartClient.CFG_ROTATE_CAMERA.get()) {
                         rot.mul(RotationAxis.POSITIVE_Y.rotationDegrees(90 + vehicle.getYaw(tickDelta)).mul(rotation, rotation), rotation);
-                        this.horizontalPlane.set(0.0F, 0.0F, 1.0F).rotate(this.rotation);
-                        this.verticalPlane.set(0.0F, 1.0F, 0.0F).rotate(this.rotation);
-                        this.diagonalPlane.set(1.0F, 0.0F, 0.0F).rotate(this.rotation);
                     }
                 }
             }
         }
     }
+
+    @Redirect(method = "setRotation", at = @At(value = "INVOKE", target = "Lorg/joml/Quaternionf;rotationYXZ(FFF)Lorg/joml/Quaternionf;"))
+    private Quaternionf forkcart$useCorrectEquation(Quaternionf instance, float angleY, float angleX, float angleZ, @Local(ordinal = 0, argsOnly = true) float yaw, @Local(ordinal = 1, argsOnly = true) float pitch) {
+        return instance.rotationYXZ((float) Math.PI - yaw * (float) (Math.PI / 180.0), -pitch * (float) (Math.PI / 180.0), 0.0F);
+    }
+
 }
