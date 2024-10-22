@@ -42,16 +42,6 @@ public record Pose(Vector3dc translation, Matrix3dc basis) {
         }
     }
 
-    public Pose invertIf(boolean invert) {
-        if(invert) return this.invert();
-        return this;
-    }
-
-    public Pose invert() {
-        Matrix3d basis = this.basis.invert(new Matrix3d());
-        return new Pose(translation, basis);
-    }
-
     public static Vector3d cubicHermiteSpline(double t, double factor, Vector3dc p0, Vector3dc m0, Vector3dc p1, Vector3dc m1,
                                               Vector3d pOut, @Nullable Vector3d mOut) {
         var temp = new Vector3d();

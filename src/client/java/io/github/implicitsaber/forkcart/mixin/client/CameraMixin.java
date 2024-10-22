@@ -9,6 +9,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BlockView;
 import org.joml.Quaternionf;
 import org.joml.Vector3d;
+import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,6 +21,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class CameraMixin {
     @Shadow protected abstract void setPos(Vec3d pos);
     @Shadow @Final private Quaternionf rotation;
+    @Shadow @Final private Vector3f horizontalPlane;
+    @Shadow @Final private Vector3f verticalPlane;
+    @Shadow @Final private Vector3f diagonalPlane;
 
     @Inject(method = "update(Lnet/minecraft/world/BlockView;Lnet/minecraft/entity/Entity;ZZF)V",
             at = @At(value = "INVOKE", shift = At.Shift.AFTER, ordinal = 0, target = "Lnet/minecraft/client/render/Camera;setPos(DDD)V"))
@@ -40,6 +44,9 @@ public abstract class CameraMixin {
 
                     if (ForkcartClient.CFG_ROTATE_CAMERA.get()) {
                         rot.mul(RotationAxis.POSITIVE_Y.rotationDegrees(90 + vehicle.getYaw(tickDelta)).mul(rotation, rotation), rotation);
+                        this.horizontalPlane.set(0.0F, 0.0F, 1.0F).rotate(this.rotation);
+                        this.verticalPlane.set(0.0F, 1.0F, 0.0F).rotate(this.rotation);
+                        this.diagonalPlane.set(1.0F, 0.0F, 0.0F).rotate(this.rotation);
                     }
                 }
             }
