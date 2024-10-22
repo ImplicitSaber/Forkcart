@@ -8,7 +8,10 @@ Every feature present in the original mod should be here too. However, this mod 
 4. Track ties face the direction you are facing when placed
 5. Some random bugfixes
 ## Versions
-Currently, only Minecraft version 1.21 is supported, however more version support is planned.
+| Game Version | Mod Version | Supported |
+| --- | --- | --- |
+| 1.20.1 | v1.20.1-1.1.0 | YES |
+| 1.21 | v1.21-1.1.0 | YES |
 ## Installation
 Currently, the mod can only be obtained from our [releases page](https://github.com/ImplicitSaber/Forkcart/releases).
 ## How To
