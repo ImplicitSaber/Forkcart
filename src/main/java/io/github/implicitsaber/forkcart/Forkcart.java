@@ -7,6 +7,7 @@ import io.github.implicitsaber.forkcart.block.TrackTiesBlockEntity;
 import io.github.implicitsaber.forkcart.entity.TrackFollowerEntity;
 import io.github.implicitsaber.forkcart.item.LoreBlockItem;
 import io.github.implicitsaber.forkcart.item.TrackItem;
+import io.github.implicitsaber.forkcart.util.ForgeFixes;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
@@ -80,6 +81,8 @@ public class Forkcart implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		if(ForgeFixes.isConnector()) LOGGER.warn("Forkcart is running on Sinytra Connector. Be prepared for unexpected behavior!");
+
 		BlockItem tieItem = Registry.register(Registries.ITEM, id("track_ties"),
 				new LoreBlockItem(TRACK_TIES, new Item.Settings(), List.of(
 								Text.translatable("item.forkcart.track_ties.desc").formatted(Formatting.GRAY, Formatting.ITALIC)
