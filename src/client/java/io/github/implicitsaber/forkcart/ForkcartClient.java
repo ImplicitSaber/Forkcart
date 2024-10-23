@@ -4,15 +4,19 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.github.implicitsaber.forkcart.block.entity.TrackTiesBlockEntityRenderer;
 import io.github.implicitsaber.forkcart.config.Config;
 import io.github.implicitsaber.forkcart.config.ConfigOption;
+import io.github.implicitsaber.forkcart.util.ForgeHelper;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.client.render.entity.EmptyEntityRenderer;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.io.IOException;
 
@@ -47,5 +51,11 @@ public class ForkcartClient implements ClientModInitializer {
 							.then(CONFIG.command(LiteralArgumentBuilder.literal("config"),
 									FabricClientCommandSource::sendFeedback))
 		));
+
+		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
+			if(ForgeHelper.isConnector()) {
+				client.inGameHud.getChatHud().addMessage(Text.translatable("forkcart.msg.connector").formatted(Formatting.RED));
+			}
+		});
 	}
 }

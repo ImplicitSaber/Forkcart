@@ -16,6 +16,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.joml.Matrix3d;
@@ -23,6 +24,10 @@ import org.joml.Vector3d;
 import org.joml.Vector3f;
 
 public class TrackTiesBlockEntityRenderer implements BlockEntityRenderer<TrackTiesBlockEntity> {
+
+    // Required for Connector on NeoForge to render this BE properly
+    public static final Box INFINITE_BOX = new Box(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+
     public static final int WHITE = 0xFFFFFFFF;
     public static final Identifier CHAIN_TRACK_TEXTURE = Forkcart.id("textures/chain_track.png");
     public static final Identifier STATION_TRACK_TEXTURE = Forkcart.id("textures/station_track.png");
@@ -157,6 +162,12 @@ public class TrackTiesBlockEntityRenderer implements BlockEntityRenderer<TrackTi
     @Override
     public boolean rendersOutsideBoundingBox(TrackTiesBlockEntity blockEntity) {
         return true;
+    }
+
+    // Required for Connector on NeoForge to render this BE properly
+    @SuppressWarnings("unused")
+    public Box getRenderBoundingBox(TrackTiesBlockEntity be) {
+        return INFINITE_BOX;
     }
 
     @Override

@@ -33,5 +33,7 @@
 
   "tag.item.forkcart.track": "Track",
 
-  "itemGroup.forkcart": "Forkcart"
+  "itemGroup.forkcart": "Forkcart",
+
+  "forkcart.msg.connector": "Forkcart has detected that it is running in a Sinytra Connector instance pre-1.21. Camera rotation on tracks is disabled."
 }
