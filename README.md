@@ -13,7 +13,7 @@ Every feature present in the original mod should be here too. However, this mod 
 | 1.20.1 | v1.20.1-1.1.0-fix2 | YES |
 | 1.21 | v1.21-1.1.0        | YES |
 ## Installation
-Currently, the mod can only be obtained from our [releases page](https://github.com/ImplicitSaber/Forkcart/releases).
+Currently, the mod can only be obtained on [Modrinth](https://modrinth.com/mod/forkcart) or from our [releases page](https://github.com/ImplicitSaber/Forkcart/releases).
 ## How To
 This is a basic tutorial on using the mod. If you already know how to use the original mod, skip to the New Features subsection.
 ### Basic Features
