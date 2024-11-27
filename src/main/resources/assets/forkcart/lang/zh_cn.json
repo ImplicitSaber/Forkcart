@@ -1,0 +1,37 @@
+{
+  "block.forkcart.track_ties": "轨道枕木",
+  "block.forkcart.switch_ties": "道岔枕木",
+  "block.forkcart.invisible_ties": "隐形枕木",
+  "block.forkcart.shuttle_ties": "穿梭枕木",
+  "item.forkcart.track": "轨道",
+  "item.forkcart.chain_track": "链轨",
+  "item.forkcart.station_track": "车站轨道",
+  "item.forkcart.brake_track": "刹车轨道",
+
+  "item.forkcart.track_ties.desc": "放置后交互可旋转",
+  "item.forkcart.switch_ties.desc": "通电时将车辆推向右侧",
+  "item.forkcart.invisible_ties.desc": "除非持有物品，否则不可见",
+  "item.forkcart.shuttle_ties.desc": "无电时使车辆反向行驶",
+
+  "item.forkcart.track.desc": "将两个轨道枕木连接在一起",
+  "item.forkcart.track.standard.desc": "常规轨道，无附加效果",
+  "item.forkcart.track.chain.desc": "无电时拉动车辆沿轨道移动",
+  "item.forkcart.track.station.desc": "根据第一个枕木是否通电来保持或推动车辆",
+  "item.forkcart.track.brake.desc": "无电时减慢车辆速度",
+
+  "item.forkcart.track.origin": "已选择第一个轨道",
+  "item.forkcart.track.clear_hint": "在非轨道方块上使用以取消上次的选择",
+
+  "entity.forkcart.track_follower": "轨道追踪器",
+
+  "forkcart.config.query_value": "选项 '%s' 当前值为 '%s'。",
+  "forkcart.config.set_value": "选项 '%s' 已设置为 '%s'。",
+
+  "forkcart.config.forkcart_client.rotate_camera.desc": "建议为晕3d的玩家将此项设置为 'false'。当设置为 'false' 时，玩家的摄像机方向将保持水平，即使在非水平的叉车轨道上。非水平轨道在将 'rotate_camera' 设置为 'false' 时，最佳体验是在第三人称视角下。",
+  "forkcart.config.forkcart_client.track_resolution.desc": "较高的值会降低性能并提高视觉质量。决定轨道在渲染时被分割成多少段，较少的段落会使轨道看起来更为锯齿。此项不会影响矿车在轨道上的运动。（抗锯齿）",
+  "forkcart.config.forkcart_client.track_render_distance.desc": "当原始轨道枕木距离玩家一定的区块数时，轨道将不被渲染。",
+
+  "tag.item.forkcart.track": "轨道",
+
+  "itemGroup.forkcart": "叉车"
+}
