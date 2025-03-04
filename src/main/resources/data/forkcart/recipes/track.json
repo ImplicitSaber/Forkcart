@@ -3,19 +3,19 @@
   "category": "misc",
   "key": {
     "A": {
-      "item": "minecraft:stick"
+      "item": "minecraft:rail"
     },
     "B": {
-      "tag": "minecraft:wooden_slabs"
+      "item": "minecraft:iron_ingot"
     }
   },
   "pattern": [
-    "B B",
-    "BAB",
-    "B B"
+    "B",
+    "A",
+    "B"
   ],
   "result": {
-    "count": 8,
-    "id": "forkcart:track_ties"
+    "count": 4,
+    "item": "forkcart:track"
   }
 }

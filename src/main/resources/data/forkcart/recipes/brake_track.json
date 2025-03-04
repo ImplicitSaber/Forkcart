@@ -7,15 +7,18 @@
     },
     "B": {
       "item": "minecraft:iron_ingot"
+    },
+    "C": {
+      "tag": "minecraft:wool"
     }
   },
   "pattern": [
-    "B",
-    "A",
-    "B"
+    " B ",
+    "CAC",
+    " B "
   ],
   "result": {
     "count": 4,
-    "id": "forkcart:track"
+    "item": "forkcart:brake_track"
   }
 }
