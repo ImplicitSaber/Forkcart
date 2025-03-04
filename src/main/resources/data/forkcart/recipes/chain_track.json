@@ -9,7 +9,7 @@
       "item": "minecraft:iron_ingot"
     },
     "C": {
-      "tag": "minecraft:wool"
+      "item": "minecraft:chain"
     }
   },
   "pattern": [
@@ -19,6 +19,6 @@
   ],
   "result": {
     "count": 4,
-    "id": "forkcart:brake_track"
+    "item": "forkcart:chain_track"
   }
 }
