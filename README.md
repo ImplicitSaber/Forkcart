@@ -1,3 +1,4 @@
+# THIS MOD WILL LIKELY NOT RECEIVE ANY FURTHER UPDATES
 # Forkcart
 A fork of the [Splinecart mod](https://github.com/FoundationGames/Splinecart), which was developed by FoundationGames. This fork was created to add new features to the mod and to port it to more versions.
 ## Features
